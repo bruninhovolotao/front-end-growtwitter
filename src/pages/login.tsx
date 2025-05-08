@@ -21,13 +21,19 @@ export function Login (){
         const { token } = response.data.dados;
 
         localStorage.setItem("token", token);
-            alert("Login realizado com sucesso!")
+        alert("Login realizado com sucesso!");
 
-        navigate('/');
-
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        navigate("/");
+        
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-        alert(error?.response?.data?.message || "Erro ao fazer login");
+        const mensagemError = error.response.data.mensagem;
+
+        if(mensagemError){
+            alert(mensagemError);
+        } else{
+            alert("Erro ao realizar login");
+        }
     }
   }
 
