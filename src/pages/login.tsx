@@ -1,7 +1,36 @@
 import { Box, Button, Container, Grid, TextField } from '@mui/material'
-import '../pages/login.css'
+import '../pages/login.css';
+import { useState } from "react";
+import { api } from '../services/api';
+import { useNavigate } from 'react-router-dom';
 
 export function Login (){
+    const [username, setUsername] = useState("");
+    const [senha, setSenha] = useState("");
+    const navigate = useNavigate();
+
+    async function handleLogin(e: React.FormEvent){
+        e.preventDefault();
+  
+    try {
+        const response = await api.post("/login", {
+            emailOuUsername: username,
+            senha: senha
+        });
+
+        const { token } = response.data.dados;
+
+        localStorage.setItem("token", token);
+            alert("Login realizado com sucesso!")
+
+        navigate('/');
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+        alert(error?.response?.data?.message || "Erro ao fazer login");
+    }
+  }
+
     return(
         <>
         <Box className="body-login">
@@ -14,12 +43,12 @@ export function Login (){
                     </Grid>
                     <Grid size={5} className='login-form form'>
                         <h2>Entrar no Growtwitter</h2>
-                        <Box component="form" sx={{ '& .MuiTextField-root': { width: '100%' } }} noValidate autoComplete="off">
-                        <TextField id="outlined-basic" label="Usuário" variant="outlined" sx={{marginBottom: 2}} />
+                        <Box component="form" onSubmit={handleLogin} sx={{ '& .MuiTextField-root': { width: '100%' } }} noValidate autoComplete="off">
+                        <TextField id="outlined-basic" label="Usuário" variant="outlined" sx={{marginBottom: 2}} value={username} onChange={(e) => setUsername(e.target.value)} />
 
-                        <TextField id="outlined-password-input" label="Password" type="password" autoComplete="current-password" />
+                        <TextField id="outlined-password-input" label="Password" type="password" autoComplete="current-password" value={senha} onChange={(e) => setSenha(e.target.value)} />
 
-                        <Button variant="contained" disableElevation>Entrar</Button>
+                        <Button type="submit" variant="contained" disableElevation>Entrar</Button>
                         </Box>
                     </Grid>
                 </Grid>
