@@ -1,7 +1,12 @@
 import './feed.css'
-import { Avatar, Box, Button, Container, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Stack, Typography } from '@mui/material'
+import * as React from 'react';
+import { api } from '../services/api';
+import Modal from '@mui/material/Modal';
+import Backdrop from '@mui/material/Backdrop';
+import { Avatar, Box, Button, Container, Fade, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Stack, TextareaAutosize, Typography } from '@mui/material'
 import HomeFilledIcon from '@mui/icons-material/HomeFilled';
 import TagIcon from '@mui/icons-material/Tag';
+import CloseIcon from '@mui/icons-material/Close';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import CommentIcon from '@mui/icons-material/Comment';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -47,6 +52,61 @@ export function Feed (){
     },
   ]
 
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
+    const style = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 500,
+        bgcolor: 'background.paper',
+        boxShadow: 24,
+        p: 4,
+        borderRadius: 2
+    };
+
+    const [conteudo, setConteudo] = React.useState("");
+
+    async function HandleNewTwetts(){
+
+    if(!conteudo.trim()){
+        alert("Escreva algo antes de publicar seu tweet.")
+        return;
+    }
+
+    const token = localStorage.getItem("token");
+
+    if(!token){
+        alert("Você precisa estar logado para publicar um tweet")
+        return;
+    }
+
+    try {
+        const response = await api.post('/tweets',
+            { conteudo, tipo: "tweet"},
+            { headers: {Authorization: `Bearer ${token}`}}
+        )
+
+        alert("Twett publicado com sucesso!")
+        console.log(token)
+        setConteudo("");
+        handleClose();
+
+        console.log(response)
+        
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+        const mensagem = error.response.data
+        console.log(mensagem)
+        
+    }
+    
+
+    }
+
 
     return(
         <>
@@ -83,7 +143,7 @@ export function Feed (){
                                 </ListItem>
                             </List>
                             </nav>
-                            <Button variant="contained" className='tweet-button' disableElevation>Twettar</Button>
+                            <Button onClick={handleOpen} variant="contained" className='tweet-button' disableElevation>Twettar</Button>
                         </Box>
                         <Box className='profile-box'>
                             <Box className='user-profile-box'>
@@ -144,6 +204,27 @@ export function Feed (){
                     </Grid>
                 </Grid>
             </Container>
+
+            <Modal
+                
+                open={open}
+                onClose={handleClose}
+                closeAfterTransition
+                slots={{ backdrop: Backdrop }}
+                slotProps={{
+                backdrop: {
+                    timeout: 500,
+                },
+                }}
+            >
+                <Fade in={open}>
+                    <Box sx={style} className='modal-content'>
+                        <Button onClick={handleClose} variant="text" className='button-close'><CloseIcon/></Button>
+                        <TextareaAutosize aria-label="empty textarea" placeholder="O que está acontecendo?" value={conteudo} onChange={(e) => setConteudo(e.target.value)} />
+                        <Button onClick={HandleNewTwetts} variant="contained" className='tweet-button' disableElevation>Postar</Button>
+                    </Box>
+                </Fade>
+            </Modal>
         </>
     )
 }

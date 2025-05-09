@@ -19,15 +19,9 @@ body {
 }
 
 .tweet-button {
-    margin-top: 20px;
-    padding: 10px;
+    padding: 10px !important;
     width: 100%;
-    background-color: #1da1f2;
-    color: white;
-    border: none;
-    border-radius: 25px;
-    font-weight: bold;
-    cursor: pointer;
+    border-radius: 25px !important;
 }
 
 .user-profile-box {
@@ -152,4 +146,34 @@ body {
     color: #1da1f2;
     text-decoration: none;
     font-size: 12px;
+}
+
+/* MODAL */
+
+.modal-content{
+    padding: 30px 10px 10px 10px !important; 
+}
+
+.modal-content textarea{
+    width: 95%;
+    height: 100px !important;
+    margin: 20px 0; 
+    padding: 10px; 
+    font-size: 22px; 
+    border: none; 
+    resize: none;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.modal-content .button-close{
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    min-width: 40px;
+}
+
+.modal-content .tweet-button{
+    width: 120px;
+    border-radius: 30px;
+    float: right;
 }
