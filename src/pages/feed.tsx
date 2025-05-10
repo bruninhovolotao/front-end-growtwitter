@@ -11,46 +11,22 @@ import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined
 import CommentIcon from '@mui/icons-material/Comment';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
+interface Tweet{
+    id: number;
+    conteudo: string;
+    tipo: string;
+    criadoEm: string;
+    replies: string,
+    likes: string,
+    usuario: {
+        id: number;
+        nome: string;
+        username: string;
+    }
+}
+
 export function Feed (){
 
-    const posts = [
-    {
-      user: "Growdev",
-      handle: "@growdev",
-      avatar: "assets/avatar-default.png",
-      time: "3h",
-      content: "Esta é uma demonstração da aplicação inspiradora do Bloco Intermediário - Programa Starter :)",
-      likes: 1,
-      comments: 0
-    },
-    {
-      user: "Michael Scott",
-      handle: "@michael__scott",
-      avatar: "/avatars/michael.png",
-      time: "3h",
-      content: "Prefiro ser temido ou amado? Fácil. Ambos. Quero que as pessoas tenham medo do quanto me amam ;)",
-      likes: 0,
-      comments: 0
-    },
-    {
-      user: "Daphne Dog",
-      handle: "@daphne",
-      avatar: "/avatars/daphne.png",
-      time: "3h",
-      content: "Hoje comi a comidinha que a mamae fez, mas eu amo mais o meu papai",
-      likes: 2,
-      comments: 0
-    },
-    {
-      user: "Forrest Gump",
-      handle: "@forrest",
-      avatar: "/avatars/forrest.png",
-      time: "3h",
-      content: "Minha mãe sempre disse: Você tem que deixar o passado para trás antes de seguir em frente.",
-      likes: 0,
-      comments: 0
-    },
-  ]
 
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
@@ -107,6 +83,38 @@ export function Feed (){
 
     }
 
+    const [tweets, setTweets] = React.useState<Tweet[]>([]);
+
+    async function HandleListTweets(){
+
+        try {
+
+            const token = localStorage.getItem("token");
+
+            if(!token){
+                return;
+            }
+
+            const response = await api.get("/tweets", {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+            });
+
+            setTweets(response.data.dados)
+            console.log(response.data.dados)
+            
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+            console.error("Erro ao buscar tweets:", error);
+            console.error("Mensagem:", error.response?.data?.mensagem);
+}
+    }
+
+    React.useEffect(()=> {
+        HandleListTweets();
+    }, []);
+
 
     return(
         <>
@@ -160,17 +168,17 @@ export function Feed (){
                     </Grid>
                     <Grid component={"main"} size={6} className='feed'>
                         <h1>Página Inicial</h1>
-                            {posts.map((post, i) => (
+                            {tweets.map((tweet) => (
 
-                            <Grid key={i} className='tweet'>
-                                <Avatar alt={post.user} src={post.avatar} className='avatar-content' />
+                            <Grid key={tweet.id} className='tweet'>
+                                <Avatar alt={tweet.usuario.nome} src={tweet.usuario.nome} className='avatar-content' />
                                 <Box className="post-content">
-                                    <Typography component={"strong"}>{post.user} </Typography>
-                                    <Typography component={"span"}>{post.handle} - {post.time}</Typography>
-                                    <Typography component={"p"}>{post.content}</Typography>
+                                    <Typography component={"strong"}>{tweet.usuario.nome} - @{tweet.usuario.username}</Typography>
+                                    <Typography component={"span"}>{new Date(tweet.criadoEm).toLocaleDateString()}</Typography>
+                                    <Typography component={"p"}>{tweet.conteudo}</Typography>
                                     <Box className='actions-content'>
-                                        <Box className="action-comments"><CommentIcon />{post.comments}</Box>
-                                        <Box className='action-likes'><FavoriteBorderIcon/>{post.likes}</Box>
+                                        <Box className="action-comments"><CommentIcon />{tweet.replies.length}</Box>
+                                        <Box className='action-likes'><FavoriteBorderIcon/>{tweet.likes.length}</Box>
                                          
                                     </Box>
                                 </Box>
