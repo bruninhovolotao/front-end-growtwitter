@@ -74,7 +74,7 @@ export function SignUp (){
                     <Grid size={5} className='signup-form form'>
                         <h2>Criar uma conta</h2>
                         <Box component="form" onSubmit={handleCadastro} sx={{ '& .MuiTextField-root': { width: '100%' } }} noValidate autoComplete="off">
-                            <TextField label="Nome" variant="outlined" sx={{marginBottom: 2}} value={nome} onChange={(e) => setNome(e.target.value)} error={errors.nome} helperText={errors.nome ? "Preencha o Nome" : ""} />
+                            <TextField label="Nome completo" variant="outlined" sx={{marginBottom: 2}} value={nome} onChange={(e) => setNome(e.target.value)} error={errors.nome} helperText={errors.nome ? "Preencha o Nome" : ""} />
                             <TextField label="E-mail" type="email" variant="outlined" sx={{marginBottom: 2}} value={email} onChange={(e) => setEmail(e.target.value)} error={errors.email} helperText={errors.email ? "Preencha o E-mail" : ""} />
                             <TextField label="Senha" type="password" autoComplete="current-password" sx={{marginBottom: 2}} value={senha} onChange={(e) => setSenha(e.target.value)} error={errors.senha} helperText={errors.senha ? "Preencha a Senha" : ""} />
                             <TextField label="Usuário" variant="outlined" value={username} onChange={(e) => setUsername(e.target.value)} error={errors.username} helperText={errors.username ? "Preencha o Usuário" : ""} />
