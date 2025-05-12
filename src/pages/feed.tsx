@@ -71,7 +71,6 @@ export function Feed (){
         )
 
         alert("Twett publicado com sucesso!")
-        console.log(token)
         setConteudo("");
         handleClose();
 
