@@ -11,6 +11,11 @@ import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined
 import CommentIcon from '@mui/icons-material/Comment';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
+interface Usuario {
+  nome: string;
+  username: string;
+}
+
 interface Tweet{
     id: number;
     conteudo: string;
@@ -26,7 +31,6 @@ interface Tweet{
 }
 
 export function Feed (){
-
 
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
@@ -111,6 +115,21 @@ export function Feed (){
 }
     }
 
+    const [usuario, setUsuario] = React.useState<Usuario | null>(null);
+
+    React.useEffect(() => {
+        const usuarioLogado = localStorage.getItem("usuario")
+        if(usuarioLogado){
+            setUsuario(JSON.parse(usuarioLogado))
+        }
+    }, []);
+
+    function handleLogout(){
+        localStorage.removeItem("token")
+        localStorage.removeItem("usuario")
+        window.location.href = "/login"
+    }
+
     React.useEffect(()=> {
         HandleListTweets();
     }, []);
@@ -119,8 +138,8 @@ export function Feed (){
     return(
         <>
             <Container>
-                <Grid container>
-                    <Grid component={"aside"} size={3} className='sidebar'>
+                <Grid container className="feed-container">
+                    <Grid component={"aside"} size={2} className='sidebar'>
                         <Box>
                             <img src='assets/logo_growtweet.svg' alt='Logo GrowTweet' className='logo' />
                             <nav aria-label="main mailbox folders">
@@ -156,14 +175,14 @@ export function Feed (){
                         <Box className='profile-box'>
                             <Box className='user-profile-box'>
                                 <Stack direction="row" spacing={2} className='avatar-user'>
-                                    <Avatar alt="Remy Sharp" src='assets/avatar-default.png' />
+                                    <Avatar alt="Remy Sharp" src={usuario?.nome} />
                                 </Stack>
                                 <Box className="user-info">
-                                    <strong>Remy Sharp</strong>
-                                    <p>@remysharp</p>
+                                    <strong>{usuario?.nome}</strong>
+                                    <p>@{usuario?.username}</p>
                                 </Box>
                             </Box>
-                            <a href="#" className='logout'>Sair</a>
+                            <a onClick={handleLogout} className='logout'>Sair</a>
                         </Box>
                     </Grid>
                     <Grid component={"main"} size={6} className='feed'>

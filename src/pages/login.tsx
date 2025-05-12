@@ -30,9 +30,10 @@ export function Login (){
             senha: senha
         });
 
-        const { token } = response.data.dados;
+        const { token, usuario } = response.data.dados;
 
         localStorage.setItem("token", token);
+        localStorage.setItem("usuario", JSON.stringify(usuario)); 
         alert("Login realizado com sucesso!");
 
         navigate("/feed");

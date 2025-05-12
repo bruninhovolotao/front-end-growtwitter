@@ -4,6 +4,10 @@ body {
     background-color: white;
 }
 
+.feed-container{
+    display: flex;
+}
+
 .sidebar {
     background-color: white;
     border-right: 1px solid #ccc;
@@ -11,11 +15,14 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    position: fixed;
+    height: 100vh;
 }
 
 .logo {
     color: #1da1f2;
     font-size: 24px;
+    margin-left: 20px;
 }
 
 .tweet-button {
@@ -56,6 +63,7 @@ body {
     color: #2a2a2a;
     font-size: 12px;
     text-decoration: none;
+    cursor: pointer;
 }
 
 /* TWEET */
@@ -63,6 +71,7 @@ body {
 .feed{
     background: white;
     border-right: 1px solid #ccc;
+    margin-left: 34vh;
 }
 
 .feed h1{
